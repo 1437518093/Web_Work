@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Work</title>
+    <script src="js/animate.js"></script>
+    <link rel="stylesheet" href="Work.css">
+</head>
+<body>
+    <div class="top-wrapper">
+        <div class="top">
+            <img src="images/a15.png" alt="15">
+            <div id="top_p" class="top_p">
+                <p id="tp">[温馨提示]最近有不少不法分子在网上骗人，请大家注意!!!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" id="box">
+        <div class="slider" id="slider">
+            <div class="slide"><img src="images/b5.png" alt="5"></div>
+            <div class="slide"><img src="images/b1.png" alt="1"></div>
+            <div class="slide"><img src="images/b2.png" alt="2"></div>
+            <div class="slide"><img src="images/b3.png" alt="3"></div>
+            <div class="slide"><img src="images/b4.png" alt="4"></div>
+            <div class="slide"><img src="images/b5.png" alt="5"></div>
+            <div class="slide"><img src="images/b1.png" alt="1"></div>
+        </div>
+        <span id="left"><</span>
+        <span id="right">></span>
+        <ul class="nav" id="nav">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script>
+        var box =document.getElementById("box");
+        var oNavlist =document.getElementById("nav").children;
+        var slider=document.getElementById("slider");
+        var left=document.getElementById("left");
+        var right=document.getElementById("right");
+        var top_p=document.getElementById("tp");
+        var i =1;
+        var timer;
+        var isMoving =false;
+
+        //文字滚动
+        setInterval(function(){
+            tp.style.left=parseInt(getStyle(tp,"left"))-1+"px";
+            if(parseInt(getStyle(tp,"left"))<=-420){
+                tp.style.left="875px";
+            }
+        },13);
+
+        //轮播下一张的函数
+        function next() {
+                var a =slider.style.left;
+                var b = a.substr(0,5);
+                if(parseInt(b,10)<-6000){
+                    slider.style.left = "-1200px";
+                    i=1;
+                }
+            i++;
+            changeColor();
+            animate(slider,{left:-1200 *i},function(){
+                if(i === 6){
+                    slider.style.left = "-1200px";
+                    i=1;
+                }
+            });
+        }
+
+        //轮播上一张的函数
+        function front() {
+            var a =slider.style.left;
+            var b = a.substr(0,5);
+            if(parseInt(b,10)>-1200){
+                slider.style.left = "-6000px";
+                i=5;
+            }
+            i--;
+            changeColor();
+            animate(slider,{left:-1200 *i},function(){
+                if(i === 0){
+                    slider.style.left = "-6000px";
+                    i=5;
+                }
+            });
+        }
+
+        var timer = setInterval(next,3000);
+
+        //鼠标划入，清除定时器
+        box.onmouseover =function(){
+            animate(left,{opacity:50});
+            animate(right,{opacity:50});
+            clearInterval(timer);
+        }
+
+        //鼠标划入，开启定时器
+        box.onmouseout =function(){
+            animate(left,{opacity:0});
+            animate(right,{opacity:0});
+            timer = setInterval(next,3000);
+        }
+        //鼠标点击时，执行对应的函数
+        right.onclick = next;
+        left.onclick = front;
+
+        //小按钮点击事件
+        for (var index = 0; index < oNavlist.length; index++) {
+            oNavlist[index].idx = index + 1;
+            oNavlist[index].onclick = function(){
+                i = this.idx;
+                changeColor();
+                animate(slider,{left:-1200 *i});
+            }  
+        }
+        //小按钮改变颜色
+        function changeColor(){
+            for (var index = 0; index < oNavlist.length; index++) {
+                oNavlist[index].className = "";
+            }
+            oNavlist[(i+4)%5].className = "active";
+        }
+    </script>
+    
+</body>
+</html>
